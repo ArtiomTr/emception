@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-export $(cat .env | xargs)
-
 NINJA_FILE=""
 BOX=""
 TOOLING_DIR=""

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -d emscripten ]; then
     # nothing to do here
     exit
@@ -8,9 +10,7 @@ fi
 SRC=$(dirname $0)
 SRC=$(realpath "$SRC")
 
-# We use here 3.1.24 since that's the latest tag it's been tested with.
-# Feel free to try a newer version
-curl --silent --output emscripten.zip --location https://github.com/emscripten-core/emscripten/archive/refs/tags/3.1.24.zip
+curl --output emscripten.zip --location https://github.com/emscripten-core/emscripten/archive/refs/tags/$EMSCRIPTEN_VERSION.zip
 unzip -q emscripten.zip
 rm emscripten.zip
 mv emscripten-* emscripten
@@ -50,13 +50,7 @@ rm -Rf \
     ./cache/build
 # remove "cache/build" to avoid dealing with empty directories
 
-if [ -d /emsdk/upstream/emscripten/cache ]; then
-  cp -R /emsdk/upstream/emscripten/cache ./cache
-else
-  CONTAINER_ID=$(docker create emscripten/emsdk:3.1.24)
-  docker cp $CONTAINER_ID:/emsdk/upstream/emscripten/cache ./cache
-  docker rm $CONTAINER_ID
-fi
+cp -R /emsdk/upstream/emscripten/cache ./cache
 
 popd
 

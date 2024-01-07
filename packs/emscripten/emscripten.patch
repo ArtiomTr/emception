@@ -1,48 +1,26 @@
 diff --git a/emscripten/tools/shared.orig.py b/emscripten/tools/shared.py
-index 22858bd..0eaff95 100644
+index 455ec00..91330f4 100644
 --- a/emscripten/tools/shared.orig.py
 +++ b/emscripten/tools/shared.py
-@@ -449,14 +449,14 @@ def check_sanity(force=False):
-     if sanity_is_correct():
-       return
+@@ -447,20 +447,7 @@ def check_sanity(force=False):
+   sanity_file = cache.get_path('sanity.txt')
  
+   def sanity_is_correct():
 -    if os.path.exists(sanity_file):
 -      sanity_data = utils.read_file(sanity_file)
--      logger.info('old sanity: %s' % sanity_data)
--      logger.info('new sanity: %s' % expected)
--      logger.info('(Emscripten: config changed, clearing cache)')
--      Cache.erase()
--    else:
--      logger.debug(f'sanity file not found: {sanity_file}')
-+    # if os.path.exists(sanity_file):
-+    #   sanity_data = utils.read_file(sanity_file)
-+    #   logger.info('old sanity: %s' % sanity_data)
-+    #   logger.info('new sanity: %s' % expected)
-+    #   logger.info('(Emscripten: config changed, clearing cache)')
-+    #   Cache.erase()
-+    # else:
-+    #   logger.debug(f'sanity file not found: {sanity_file}')
+-      if sanity_data == expected:
+-        logger.debug(f'sanity file up-to-date: {sanity_file}')
+-        # Even if the sanity file is up-to-date we still need to at least
+-        # check the llvm version. This comes at no extra performance cost
+-        # since the version was already extracted and cached by the
+-        # generate_sanity() call above.
+-        if force:
+-          perform_sanity_checks()
+-        else:
+-          check_llvm_version()
+-        return True # all is well
+-    return False
++    return True
  
-     perform_sanity_checks()
- 
-diff --git a/emscripten/src/proxyClient.js b/emscripten/src/proxyClient.js
-index 6402ae62a..5b622e7dc 100644
---- a/emscripten/src/proxyClient.js
-+++ b/emscripten/src/proxyClient.js
-@@ -16,13 +16,13 @@ if (typeof Module == 'undefined') {
-   };
- }
- 
--if (!Object.hasOwnProperty(Module, 'print')) {
-+if (!Module.hasOwnProperty('print')) {
-   Module['print'] = function(x) {
-     console.log(x);
-   };
- }
- 
--if (!Object.hasOwnProperty(Module, 'printErr')) {
-+if (!Module.hasOwnProperty('printErr')) {
-   Module['printErr'] = function(x) {
-     console.error(x);
-   };
-
+   if sanity_is_correct():
+     # Early return without taking the cache lock

@@ -1,6 +1,8 @@
 # build artifacts
 build/
 upstream/
+dist
+out
 
 # build cache files
 **/*.idx
@@ -13,5 +15,3 @@ upstream/
 
 # OS settings
 .DS_Store
-
-npm/dist/

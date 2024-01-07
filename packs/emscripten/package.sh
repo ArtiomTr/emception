@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 SRC=$(dirname $0)
 BUILD="$1"
 
