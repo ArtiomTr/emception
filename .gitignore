@@ -7,9 +7,6 @@ out
 # build cache files
 **/*.idx
 
-# demo
-**/node_modules
-
 # dev tools
 .idea/
 
